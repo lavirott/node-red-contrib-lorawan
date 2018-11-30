@@ -1,0 +1,28 @@
+{
+  "name": "node-red-contrib-lorawan-rn2483",
+  "version": "0.0.1",
+  "description": "Node-RED module for the LoRaWAN radio modules",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lavirott/node-red-contrib-lorawan-rn2483.git"
+  },
+  "keywords": [
+    "node-red",
+    "lorawan"
+  ],
+  "node-red": {
+    "nodes": {
+      "lorawan": "lib/lorawan-red.js"
+    }
+  },
+  "author": "Stéphane Lavirotte <stephane@lavirotte.com> (http://stephane.lavirotte.com)",
+  "homepage": "https://github.com/lavirott/node-red-contrib-lorawan-rn2483.git#readme",
+  "bugs": {
+    "url": "https://github.com/lavirott/node-red-contrib-lorawan-rn2483/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "serialport": "^7.1.0",
+	"xbee-api": "^0.6.0"
+  }
+}
