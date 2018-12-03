@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-lorawan",
   "version": "0.0.3",
-  "description": "Node-RED module for the LoRaWAN radio modules",
+  "description": "Node-RED module for the LoRaWAN RN2483 and RN2903 radio modules",
   "repository": {
     "type": "git",
     "url": "https://github.com/lavirott/node-red-contrib-lorawan.git"
