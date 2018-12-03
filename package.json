@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-lorawan-rn2483",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Node-RED module for the LoRaWAN radio modules",
   "repository": {
     "type": "git",
@@ -22,7 +22,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "serialport": "^7.1.0",
-	"xbee-api": "^0.6.0"
+    "serialport": "^7.1.0"
   }
 }
