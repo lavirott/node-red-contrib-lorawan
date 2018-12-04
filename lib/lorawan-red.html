@@ -35,26 +35,23 @@
   RED.nodes.registerType('lorawan-config', {
     category: 'config',
     defaults: {
-      apiMode: { value: '1', required: true },
       rawFrames: { value: false, required: true },
-      convertAdc: { value: true, required: true },
-      vrefAdc: { value: 1200, required: true },
+      mode: { value: '2', required: true },
+			modeP2P_radioPwr: { value: 15, required: true},
+			modeP2P_radioFreq: { value: 868100000, required: true},
+			modeP2P_radioSf: { value: 'sf12', required: true},
+			modeP2P_radioCr: { value: '4/5', required: true},
+			modeP2P_radioBw: { value: 125, required: true},
+			modeP2P_radioCRC: { value: 'on', required: true},
       serialPort: { value: '', required: true },
       lock: { value: true, required: true },
       baudRate: { value: 57600, required: true },
       dataBits: { value: 8, required: true },
       stopBits: { value: 1, required: true },
       parity: { value: 'none', required: true },
-      bufferSize: { value: 65536, required: true },
-      rtscts: { value: false, required: true },
-      xon: { value: false, required: true },
-      xoff: { value: false, required: true },
-      xany: { value: false, required: true },
-      vmin: { value: '1', required: true },
-      vtime: { value: '0', required: true }
     },
     label: function () {
-      return '('+this.id+') LoRaWAN[api:' + this.apiMode + ']@' + this.serialPort + ':' + this.baudRate;
+      return '('+this.id+') LoRaWAN[api:' + this.mode + ']@' + this.serialPort + ':' + this.baudRate;
     },
     oneditprepare: function () {
       var node = this;
@@ -72,29 +69,57 @@
         2400, 4800, 9600, 19200, 38400, 57600, 115200,
         230400, 460800, 921600
       ];
-      var apiModes = [
-        { name: 'API 1', value: '1' },
-        { name: 'API 2 (escaped characters)', value: '2' }
+      var modes = [
+        <!-- { name: 'Standard', value: '1' }, -->
+        { name: 'P2P', value: '2' }
       ];
       var dataBits = [8, 7, 6, 5];
       var stopBits = [1, 2];
       var parity = ['none', 'even', 'mark', 'odd', 'space'];
+			var power = [ -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+			var spreadingFactor = ['sf7', 'sf8', 'sf9', 'sf10', 'sf11', 'sf12'];
+			var codingRate = ['4/5', '4/6', '4/7', '4/8'];
+			var bandWidth = [125, 250, 500];
+			var crc = ['on', 'off'];
 
       buildOptionsHtml('baudRate', node.baudRate, baudRates);
       buildOptionsHtml('dataBits', node.dataBits, dataBits);
       buildOptionsHtml('stopBits', node.stopBits, stopBits);
       buildOptionsHtml('parity', node.parity, parity);
+			buildOptionsHtml('modeP2P_radioPwr', node.modeP2P_radioPwr, power);
+			buildOptionsHtml('modeP2P_radioSf', node.modeP2P_radioSf, spreadingFactor);
+			buildOptionsHtml('modeP2P_radioCr', node.modeP2P_radioCr, codingRate);
+			buildOptionsHtml('modeP2P_radioBw', node.modeP2P_radioBw, bandWidth);
+			buildOptionsHtml('modeP2P_radioCRC', node.modeP2P_radioCRC, crc);
 
-      for (i = 0; i < apiModes.length; i++) {
-        $('#node-config-input-apiMode')
+      for (i = 0; i < modes.length; i++) {
+        $('#node-config-input-mode')
           .append(
           '<option value=' +
-          apiModes[i].value +
-          ((node.apiMode == apiModes[i].value) ? ' selected>' : '>') +
-          apiModes[i].name +
+          modes[i].value +
+          ((node.mode == modes[i].value) ? ' selected>' : '>') +
+          modes[i].name +
           '</option>');
       }
-    }
+
+			$("#node-config-lookup-serial").click(function() {
+				$("#node-config-lookup-serial").addClass('disabled');
+        $.getJSON('serialports',function(data) {
+          $("#node-config-lookup-serial").removeClass('disabled');
+          var ports = [];
+          $.each(data, function(i, port) {
+             ports.push(port.comName);
+          });
+          $("#node-config-input-serialPort").autocomplete({
+            source:ports,
+            minLength:0,
+            close: function( event, ui ) {
+              $("#node-config-input-serialPort").autocomplete( "destroy" );
+            }
+          }).autocomplete("search","");
+        });
+      });
+		}
   });
 </script>
 
@@ -177,29 +202,51 @@
 </script>
 
 <script type="text/x-red" data-template-name="lorawan-config">
-  <div class="form-row">
+	<div class="form-row">
     <h5>LoRaWAN</h5>
-    <label for="node-config-input-apiMode"><i class="fa fa-code"></i> API Mode</label>
-    <select id="node-config-input-apiMode"></select>
-  </div>
-  <div class="form-row">
-    <label>&nbsp;</label>
+    <label for="node-config-input-rawFrames"><i class="fa fa-minus"></i> RAW Frames</label>
     <input type="checkbox" id="node-config-input-rawFrames" style="display: inline-block; width: auto; vertical-align: top;">
-    <label for="node-config-input-rawFrames"> RAW Frames</label>
   </div>
   <div class="form-row">
+    <label for="node-config-input-mode"><i class="fa fa-code"></i> API Mode</label>
+    <select id="node-config-input-mode"></select>
+  </div>
+	<div class="form-row">
     <label>&nbsp;</label>
-    <input type="checkbox" id="node-config-input-convertAdc" style="display: inline-block; width: auto; vertical-align: top;">
-    <label for="node-config-input-convertAdc"> Convert ADC</label>
-  </div>
-  <div class="form-row">
-    <label for="node-config-input-vrefAdc"> Value REF ADC</label>
-    <input type="number" id="node-config-input-vrefAdc" style="width:auto;">
-  </div>
+    <label for="node-config-input-modeP2P_radioPwr"> Radio Power</label>
+    <select id="node-config-input-modeP2P_radioPwr" style="width:auto;"></select>
+	</div>
+	<div class="form-row">
+    <label>&nbsp;</label>
+    <label for="node-config-input-modeP2P_radioFreq"> Radio Frequency</label>
+    <input type="number" id="node-config-input-modeP2P_radioFreq" style="width:auto;">
+	</div>
+	<div class="form-row">
+    <label>&nbsp;</label>
+    <label for="node-config-input-modeP2P_radioSf"> Radio Spreading Factor</label>
+    <select id="node-config-input-modeP2P_radioSf" style="width:auto;"></select>
+	</div>
+	<div class="form-row">
+    <label>&nbsp;</label>
+    <label for="node-config-input-modeP2P_radioCr"> Radio Coding Rate</label>
+    <select id="node-config-input-modeP2P_radioCr" style="width:auto;"></select>
+	</div>
+	<div class="form-row">
+    <label>&nbsp;</label>
+    <label for="node-config-input-modeP2P_radioBw"> Radio Bandwidth</label>
+    <select id="node-config-input-modeP2P_radioBw" style="width:auto;"></select>
+	</div>
+	<div class="form-row">
+    <label>&nbsp;</label>
+    <label for="node-config-input-modeP2P_radioCRC"> Radio CRC</label>
+    <select id="node-config-input-modeP2P_radioCRC" style="width:auto;"></select>
+	</div>
+
   <div class="form-row">
     <h5>Serial Port</h5>
-    <label for="node-config-input-serialPort"><i class="fa fa-usb"></i> Serial Port</label>
+    <label for="node-config-input-serialPort"><i class="fa fa-random"></i> Serial Port</label>
     <input type="text" id="node-config-input-serialPort" style="width:auto;">
+		<a id="node-config-lookup-serial" class="btn"><i id="node-config-lookup-serial-icon" class="fa fa-search"></i></a>
   </div>
   <div class="form-row">
     <label>&nbsp;</label>
@@ -207,65 +254,23 @@
     <label for="node-config-input-lock" style="width: 70%;">Lock port (<em>not currently supported on windows</em>)</label>
   </div>
   <div class="form-row">
-    <label for="node-config-input-baudRate"><i class="fa fa-caret-down"></i> Baud Rate</label>
-    <select id="node-config-input-baudRate">
-      </select>
+		<table width="100%">
+		  <tr>
+			  <td width="100px"><i class="fa fa-wrench"></i> <label>Settings</label></td>
+				<td width="110px"><label for="node-config-input-baudRate">Baud Rate</label></td>
+				<td width="70px"><label for="node-config-input-dataBits">Data Bits</label></td>
+				<td width="80px"><label for="node-config-input-parity">Parity</label></td>
+				<td width="70px"><label for="node-config-input-stopBits">Stop Bits</label></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td><select id="node-config-input-baudRate" style="width:92%"></select></td>
+				<td><select id="node-config-input-dataBits" style="width:90%;"></select></td>
+				<td><select id="node-config-input-parity" style="width:90%;"></select></td>
+				<td><select id="node-config-input-stopBits" style="width:90%;"></select></td>
+			</tr>
+		</table>
   </div>
-  <div class="form-row">
-    <label for="node-config-input-dataBits"><i class="fa fa-caret-down"></i> Data Bits</label>
-    <select id="node-config-input-dataBits">
-      </select>
-  </div>
-  <div class="form-row">
-    <label for="node-config-input-stopBits"><i class="fa fa-caret-down"></i> Stop Bits</label>
-    <select id="node-config-input-stopBits">
-      </select>
-  </div>
-  <div class="form-row">
-    <label for="node-config-input-parity"><i class="fa fa-caret-down"></i> Parity</label>
-    <select id="node-config-input-parity">
-      </select>
-  </div>
-  <div class="form-row">
-    <label for="node-config-input-bufferSize"><i class="fa fa-truck"></i> Buffer Size</label>
-    <input type="number" id="node-config-input-bufferSize" style="width:auto;">
-  </div>
-  <table style="width:100%">
-    <tbody style="vertical-align:top;">
-      <tr>
-        <td>
-          <div class="form-row">
-            <h6>Flow Control</h6>
-            <input type="checkbox" id="node-config-input-rtscts" style="display: inline-block; width: auto; vertical-align: top;">
-            <label for="node-config-input-rtscts"> RTS/CTS</label>
-          </div>
-          <div class="form-row">
-            <input type="checkbox" id="node-config-input-xon" style="display: inline-block; width: auto; vertical-align: top;">
-            <label><i for="node-config-input-xon"></i> XON</label>
-          </div>
-          <div class="form-row">
-            <input type="checkbox" id="node-config-input-xoff" style="display: inline-block; width: auto; vertical-align: top;">
-            <label><i for="node-config-input-xoff"></i> XOFF</label>
-          </div>
-          <div class="form-row">
-            <input type="checkbox" id="node-config-input-xany" style="display: inline-block; width: auto; vertical-align: top;">
-            <label><i for="node-config-input-xany"></i> XANY</label>
-          </div>
-        </td>
-        <td>
-          <div class="form-row">
-            <h6>Platform Options</h6>
-            <label for="node-config-input-vmin" style="width: 50px;"> vmin</label>
-            <input type="number" id="node-config-input-vmin" style="width: auto;">
-          </div>
-          <div class="form-row">
-            <label for="node-config-input-vtime" style="width: 50px;"> vtime</label>
-            <input type="number" id="node-config-input-vtime" style="width: auto;">
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </script>
 
 <script type="text/x-red" data-help-name="lorawan-config">
