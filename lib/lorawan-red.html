@@ -135,7 +135,7 @@
 </script>
 
 <script type="text/x-red" data-help-name="lorawan-rx">
-  <p>LoRaWAN Node is intended to Continuously Receive Data</p>
+  <p>LoRaWAN node is intended to Continuously Receive Data</p>
   <h3>Outputs</h3>
   <ol class="node-ports">
     <li>Standard output
@@ -167,7 +167,7 @@
 </script>
 
 <script type="text/x-red" data-help-name="lorawan-tx">
-  <p>LoRaWAN Node is intended to Transmit Data</p>
+  <p>LoRaWAN node is intended to Transmit Data</p>
   <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>payload
@@ -179,22 +179,21 @@
     <p>Once properly configured, this node will be ready to build and send data frames
       as they are received in the input node <code>msg.payload</code>
     </p>
-    </p>
-    <h4>Example</h4>
-    <p>
-      To send a <i>0x10: ZigBee Transmit Request</i>, then build the following JSON object and copy it to the <code>msg.payload</code> which this node can use to build and deliver the message
-      <pre>
-        var myDataFrame = {
-            type: 0x10,
-            id: 0x01,
-            destination64: "0013a200400a0127",
-            destination16: "fffe",
-            broadcastRadius: 0x00,
-            options: 0x00,
-            data: "Hello from Node-RED!"
-        };
-      </pre>
-    </p>
+    <!-- <h4>Example</h4> -->
+    <!-- <p> -->
+      <!-- To send a <i>0x10: ZigBee Transmit Request</i>, then build the following JSON object and copy it to the <code>msg.payload</code> which this node can use to build and deliver the message -->
+      <!-- <pre> -->
+        <!-- var myDataFrame = { -->
+            <!-- type: 0x10, -->
+            <!-- id: 0x01, -->
+            <!-- destination64: "0013a200400a0127", -->
+            <!-- destination16: "fffe", -->
+            <!-- broadcastRadius: 0x00, -->
+            <!-- options: 0x00, -->
+            <!-- data: "Hello from Node-RED!" -->
+        <!-- }; -->
+      <!-- </pre> -->
+    <!-- </p> -->
     <h3>References</h3>
     <ul>
       <li><a href="https://github.com/EmergingTechnologyAdvisors/node-serialport">SerialPort</a> - Node.js package to access serial ports for reading and writing</li>
@@ -212,33 +211,33 @@
     <select id="node-config-input-mode"></select>
   </div>
 	<div class="form-row">
-    <label>&nbsp;</label>
-    <label for="node-config-input-modeP2P_radioPwr"> Radio Power</label>
+    <label><i class="fa fa-wrench"></i> Settings</label>
+    <label for="node-config-input-modeP2P_radioPwr"> Power</label>
     <select id="node-config-input-modeP2P_radioPwr" style="width:auto;"></select>
 	</div>
 	<div class="form-row">
     <label>&nbsp;</label>
-    <label for="node-config-input-modeP2P_radioFreq"> Radio Frequency</label>
+    <label for="node-config-input-modeP2P_radioFreq"> Frequency</label>
     <input type="number" id="node-config-input-modeP2P_radioFreq" style="width:auto;">
 	</div>
 	<div class="form-row">
     <label>&nbsp;</label>
-    <label for="node-config-input-modeP2P_radioSf"> Radio Spreading Factor</label>
+    <label for="node-config-input-modeP2P_radioSf"> Spreading Factor</label>
     <select id="node-config-input-modeP2P_radioSf" style="width:auto;"></select>
 	</div>
 	<div class="form-row">
     <label>&nbsp;</label>
-    <label for="node-config-input-modeP2P_radioCr"> Radio Coding Rate</label>
+    <label for="node-config-input-modeP2P_radioCr"> Coding Rate</label>
     <select id="node-config-input-modeP2P_radioCr" style="width:auto;"></select>
 	</div>
 	<div class="form-row">
     <label>&nbsp;</label>
-    <label for="node-config-input-modeP2P_radioBw"> Radio Bandwidth</label>
+    <label for="node-config-input-modeP2P_radioBw"> Bandwidth</label>
     <select id="node-config-input-modeP2P_radioBw" style="width:auto;"></select>
 	</div>
 	<div class="form-row">
     <label>&nbsp;</label>
-    <label for="node-config-input-modeP2P_radioCRC"> Radio CRC</label>
+    <label for="node-config-input-modeP2P_radioCRC"> CRC</label>
     <select id="node-config-input-modeP2P_radioCRC" style="width:auto;"></select>
 	</div>
 
@@ -256,7 +255,7 @@
   <div class="form-row">
 		<table width="100%">
 		  <tr>
-			  <td width="100px"><i class="fa fa-wrench"></i> <label>Settings</label></td>
+			  <td width="100px"><label><i class="fa fa-wrench"></i> Settings</label></td>
 				<td width="110px"><label for="node-config-input-baudRate">Baud Rate</label></td>
 				<td width="70px"><label for="node-config-input-dataBits">Data Bits</label></td>
 				<td width="80px"><label for="node-config-input-parity">Parity</label></td>
