@@ -1,5 +1,9 @@
 # node-red-contrib-lorawan
 
+```html
+   This module is under active development. You can test it at you own risk ! ;).
+```
+
 Node-RED modules to address the LoRaWAN RN2483 and RN2903 radio modules.
 
 [RN2483](https://www.microchip.com/wwwproducts/en/RN2483) and [RN2903](https://www.microchip.com/wwwproducts/en/RN2903) are module produced by [Microchip](https://www.microchip.com/). You can read the ["RN2483 Command Reference User's Guide"](https://ww1.microchip.com/downloads/en/DeviceDoc/40001784B.pdf) and the ["RN2903 Command Reference Users Guide"](http://ww1.microchip.com/downloads/en/DeviceDoc/40001811A.pdf) to understand the protocol used over the serial connexion.
